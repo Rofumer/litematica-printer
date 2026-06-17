@@ -32,6 +32,10 @@ public class LitematicaUtils {
     }
 
     public static Vec3 usePrecisionPlacement(BlockPos pos, BlockState stateSchematic) {
+        //#if MC >= 260200
+        //$$ // EasyPlace protocol V3/V2 hit-vec API was removed in 26.2; precision placement disabled
+        //$$ return null;
+        //#else
         if (Configs.Print.EASY_PLACE_PROTOCOL.getBooleanValue()) {
             EasyPlaceProtocol protocol = PlacementHandler.getEffectiveProtocolVersion();
             Vec3 hitPos = Vec3.atLowerCornerOf(pos);
@@ -43,6 +47,7 @@ public class LitematicaUtils {
             }
         }
         return null;
+        //#endif
     }
     /**
      * 判断位置是否位于当前加载的投影范围内。
@@ -59,7 +64,11 @@ public class LitematicaUtils {
         //#endif
 
         for (SchematicPlacementManager.PlacementPart placementPart : allPlacementsTouchingChunk) {
+            //#if MC >= 260200
+            //$$ if (placementPart.getBox().contains(pos)) {
+            //#else
             if (placementPart.getBox().containsPos(pos)) {
+            //#endif
                 return true;
             }
         }

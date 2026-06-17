@@ -5,7 +5,11 @@ import fi.dy.masa.litematica.world.SchematicWorldHandler;
 import fi.dy.masa.malilib.config.options.ConfigBoolean;
 import fi.dy.masa.malilib.config.options.ConfigOptionList;
 import fi.dy.masa.malilib.util.LayerMode;
+//#if MC >= 260200
+//$$ import fi.dy.masa.malilib.util.position.LayerRange;
+//#else
 import fi.dy.masa.malilib.util.LayerRange;
+//#endif
 import lombok.Getter;
 import me.aleksilassila.litematica.printer.config.Configs;
 import me.aleksilassila.litematica.printer.enums.*;
@@ -259,9 +263,15 @@ public abstract class ClientPlayerTickHandler extends ConfigUtils {
         // Pre-fetch layer state for rebuild detection and box clamping
         LayerRange layerRange = DataManager.getRenderLayerRange();
         LayerMode layerMode = layerRange.getLayerMode();
+        //#if MC >= 260200
+        //$$ Direction.Axis layerAxis = layerRange.getAxis().toVanilla();
+        //$$ int layerMin = layerRange.getLayerRangeMin();
+        //$$ int layerMax = layerRange.getLayerRangeMax();
+        //#else
         Direction.Axis layerAxis = layerRange.getAxis();
         int layerMin = layerRange.getLayerMin();
         int layerMax = layerRange.getLayerMax();
+        //#endif
 
         boolean needRebuild = box == null
                 || !box.equals(lastBox)

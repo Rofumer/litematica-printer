@@ -12,11 +12,17 @@ public class MessageUtils {
     public static final Minecraft client = Minecraft.getInstance();
 
     public static void setOverlayMessage(Component message, boolean bl) {
+        //#if MC >= 260200
+        //$$ client.gui.chatListener().handleOverlay(message);
+        //#else
         client.gui.setOverlayMessage(message, bl);
+        //#endif
     }
 
     public static void addMessage(Component message) {
-        //#if MC >= 260100
+        //#if MC >= 260200
+        //$$ client.gui.chatListener().handleSystemMessage(message, false);
+        //#elseif MC >= 260100
         //$$ client.gui.getChat().addClientSystemMessage(message);
         //#else
         client.gui.getChat().addMessage(message);
@@ -24,7 +30,11 @@ public class MessageUtils {
     }
 
     public static void setOverlayMessage(Component message) {
+        //#if MC >= 260200
+        //$$ client.gui.chatListener().handleOverlay(message);
+        //#else
         client.gui.setOverlayMessage(message, false);
+        //#endif
     }
 
     // 扩展方法，普通字符串形式, 但并不建议使用, 因为没有做I18n
