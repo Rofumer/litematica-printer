@@ -11,8 +11,16 @@ import me.aleksilassila.litematica.printer.handler.handlers.GuiHandler;
 import me.aleksilassila.litematica.printer.printer.RegionTracker;
 import me.aleksilassila.litematica.printer.utils.ConfigUtils;
 import net.minecraft.client.Minecraft;
+//#if MC >= 260200
+//$$ import net.minecraft.client.gui.Hud;
+//#else
 import net.minecraft.client.gui.Gui;
+//#endif
+//#if MC >= 260100
+//$$ import net.minecraft.client.gui.GuiGraphicsExtractor;
+//#else
 import net.minecraft.client.gui.GuiGraphics;
+//#endif
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,7 +42,11 @@ import net.minecraft.client.DeltaTracker;
 /**
  * HUD渲染Mixin，负责打印器调试信息和进度条的绘制
  */
+//#if MC >= 260200
+//$$ @Mixin(Hud.class)
+//#else
 @Mixin(Gui.class)
+//#endif
 public abstract class MixinGui {
     @Unique
     private static final int DEBUG_PADDING = 4;
@@ -96,7 +108,9 @@ public abstract class MixinGui {
     @Inject(method = "renderItemHotbar", at = @At("TAIL"))
     //#endif
 
-    //#if MC > 12006
+    //#if MC >= 260100
+    //$$ private void hookRenderItemHotbar(GuiGraphicsExtractor guiGraphicsExtractor, DeltaTracker deltaTracker, CallbackInfo ci) {
+    //#elseif MC > 12006
     private void hookRenderItemHotbar(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
     //#elseif MC >= 12006
     //$$ private void hookRenderItemHotbar(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
@@ -114,7 +128,9 @@ public abstract class MixinGui {
         float scaledHeight = mc.getWindow().getGuiScaledHeight();
 
         // 初始化渲染矩阵
-        //#if MC > 11904
+        //#if MC >= 260100
+        //$$ RenderUtils.initGuiGraphicsExtractor(guiGraphicsExtractor);
+        //#elseif MC > 11904
         RenderUtils.initGuiGraphics(guiGraphics);
         //#else
         //$$ RenderUtils.initMatrix(poseStack);
