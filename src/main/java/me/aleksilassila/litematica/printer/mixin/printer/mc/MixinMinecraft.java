@@ -11,7 +11,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Minecraft.class)
 public class MixinMinecraft {
+    //#if MC >= 260200
+    //$$ @Inject(method = "setScreenAndShow", at = @At("HEAD"), cancellable = true)
+    //#else
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
+    //#endif
     private void onSetScreen(Screen screen, CallbackInfo ci) {
         if (ModUtils.closeScreen > 0 && screen instanceof AbstractContainerScreen<?>) {
             ModUtils.closeScreen--;
